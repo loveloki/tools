@@ -1,0 +1,15 @@
+[package]
+name = "tools"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+lofty = "0.22.4"
+walkdir = "2.5.0"
+
+[profile.release]
+opt-level = "z"
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"
