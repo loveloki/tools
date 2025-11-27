@@ -94,11 +94,15 @@ fn process_file(path: &Path, extension: &str) -> Result<bool, String> {
         .trim()
         .to_string();
     let track_number = tag.track();
+    let disc_number = tag.disk();
 
     // 格式化新文件名 (保留原始扩展名)
-    let new_filename_str = match track_number {
-        Some(track) => format!("{:02} - {}.{}", track, title, extension),
-        None => format!("{}.{}", title, extension),
+    let new_filename_str = match (disc_number, track_number) {
+        (Some(disc), Some(track)) if disc > 0 => {
+            format!("{}-{:02} - {}.{}", disc, track, title, extension)
+        }
+        (_, Some(track)) => format!("{:02} - {}.{}", track, title, extension),
+        (_, None) => format!("{}.{}", title, extension),
     };
 
     // 清洗非法字符
